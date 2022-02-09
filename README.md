@@ -19,3 +19,4 @@ To count the number of items I bought in a year.
 
 - [ ] node.js
 - [ ] css tailwind
+- [ ] CRUD
