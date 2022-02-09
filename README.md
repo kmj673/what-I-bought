@@ -15,8 +15,10 @@ To count the number of items I bought in a year.
 - [ ] set HTML CSS skeleton
 - [ ] set the font and color
 
-## learning
+## Learning
 
 - [ ] node.js
 - [ ] css tailwind
 - [ ] CRUD
+
+## User story
