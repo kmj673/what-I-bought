@@ -27,7 +27,7 @@
 
 
 ## DB Schema
-
+- [db diagram](https://dbdiagram.io/d/6287ff2cf040f104c16a8975)
 
 
 ## To run the application as a developer:
