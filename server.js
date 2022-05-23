@@ -6,7 +6,15 @@
 
 const items = require("./items");
 
-console.log(items);
+const itemArray = Object.values(items);
+
+function getItem(itemArray) {
+  let itemList = "";
+  for (let item of itemArray) {
+    itemList += `<li>${item.name} / ${item.purchase_date}</li>`;
+  }
+  return itemList;
+}
 
 const express = require("express");
 
@@ -22,7 +30,7 @@ const logger = (request, response, next) => {
 };
 
 server.use(staticHandler);
-
+server.use(bodyParser);
 server.use(logger);
 
 server.get("/", (request, response) => {
@@ -38,7 +46,8 @@ server.get("/", (request, response) => {
     ${htmlHead}
     <body>
         <h1>what-i-bought</h1>
-        <form>
+        ${getItem(itemArray)}
+        <form method="POST">
             <label for="name">Name: </label>
             <input name="name" id="name" type='text'/>
             <label for="purchase_date">Date: </label>
@@ -50,12 +59,12 @@ server.get("/", (request, response) => {
     `);
 });
 
-server.post("/", bodyParser, (request, response) => {
-  console.log(request.body);
+server.post("/", (request, response) => {
+  itemArray.push(request.body);
   response.redirect("/");
 });
 
-//catch all handler
+//catch-all handler
 server.use((request, response) => {
   response.status(404).send("<h1>Not found</h1>");
 });
