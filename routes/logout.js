@@ -1,5 +1,5 @@
 function post(request, response) {
-  response.clearCookie().redirect("/home");
+  console.log(request.method);
 }
 
 module.exports = { post };
