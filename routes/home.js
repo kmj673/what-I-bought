@@ -3,12 +3,29 @@ const items = require("../items");
 const itemList = Object.values(items);
 
 function get(request, response) {
+  console.log(request.signedCookies.sid);
   let items = "";
   for (let item of itemList) {
     items += `<li>${item.name} / ${item.purchase_date}</li>`;
   }
+  let buttons = "";
+  if (request.signedCookies.sid === undefined) {
+    buttons = /*html*/ `
+    <a href="/signup">Sign up</a>
+    <a href="/login">Log in</a>
+    `;
+  } else {
+    buttons = /*html*/ `
+    <a href="/items">My items</a>
+    <form method='POST' action='/logout'>
+      <button type='submit'>Logout</button>
+    </form>
+    `;
+  }
+
   const body = /*html*/ `
     <h1>what-i-bought</h1>
+    ${buttons}
     <div>      
       <ul>
         ${items}
@@ -31,14 +48,12 @@ function get(request, response) {
       </form>
     </div>
     `;
-  response.send(/*html*/ `
-        ${layout.html("items", body)}
-        `);
+  response.send(layout.html("home", body));
 }
 
 function post(request, response) {
   itemList.push(request.body);
-  response.redirect("/items");
+  response.redirect("/home");
 }
 
 module.exports = { get, post };

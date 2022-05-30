@@ -1,27 +1,38 @@
-const express = require("express");
-const itemsRoute = require("./routes/items");
+// routes
+const homeRoute = require("./routes/home");
 const signupRoute = require("./routes/signup");
-const logger = require("./middleware/logger");
-const model = require("./database/model");
+const loginRoute = require("./routes/login");
+const logoutRoute = require("./routes/logout");
 
-const server = express();
+//express
+const express = require("express");
+const app = express();
 const staticHandler = express.static("public");
 const bodyParser = express.urlencoded({ extended: true });
 
-server.use(staticHandler);
-server.use(bodyParser);
-server.use(logger);
+//middleware
+const logger = require("./middleware/logger");
+const cookieParser = require("cookie-parser");
 
-server.get("/signup", signupRoute.get);
-server.post("/signup", signupRoute.post);
-server.get("/items", itemsRoute.get);
-server.post("/items", itemsRoute.post);
+app.use(staticHandler);
+app.use(bodyParser);
+app.use(logger);
+app.use(cookieParser(process.env.COOKIE_SECRET));
+
+//app route handler
+app.get("/home", homeRoute.get);
+app.post("/home", homeRoute.post);
+app.get("/signup", signupRoute.get);
+app.post("/signup", signupRoute.post);
+app.get("/login", loginRoute.get);
+app.post("/login", loginRoute.post);
+app.post("/logout", logoutRoute.post);
 
 //catch-all handler
-server.use((request, response) => {
+app.use((request, response) => {
   response.status(404).send("<h1>Not found</h1>");
 });
 
 const PORT = 3000;
 
-server.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));

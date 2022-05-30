@@ -1,6 +1,6 @@
 const layout = require("../layout");
-const bcrypt = require("bcryptjs");
 const model = require("../database/model");
+const auth = require("../auth");
 
 function get(request, response) {
   const form = /* html */ `
@@ -13,17 +13,31 @@ function get(request, response) {
         <button type="submit">Submit</button>
     </form>
     `;
-  response.send(/*html*/ `${layout.html("signup", form)}`);
+  response.send(layout.html("signup", form));
 }
 
 function post(request, response) {
   const { username, password } = request.body;
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => {
-      model.createUser(username, hash);
+  model
+    .getUser(username)
+    .then((user) => {
+      //if user already exist
+      if (user !== undefined) {
+        response.redirect("/signup");
+      }
+      // if user not exist then create new user
+      else {
+        auth
+          .createUser(username, password)
+          .then((sid) =>
+            response.cookie("sid", sid, auth.COOKIE_OPTIONS).redirect("/home")
+          );
+      }
     })
-    .then(() => response.redirect("/items"));
+    .catch((error) => {
+      console.error("unexpected error happened");
+      response.send("unexpected error, ", "<a href='/signup'>Sign up</a>");
+    });
 }
 
 module.exports = { get, post };

@@ -3,7 +3,7 @@ function html(title, body) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>what-i-bought</title>
+  <title>${title}</title>
   <script defer src='script.js'></script>
   <link rel="stylesheet" href="style.css" type="text/css">
 </head>
