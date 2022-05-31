@@ -10,11 +10,17 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password TEXT NOT NULL
+
 );
 
 CREATE TABLE sessions (
     sid CHAR(24) UNIQUE NOT NULL PRIMARY KEY,
     data JSON NOT NULL
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    img BYTEA NOT NULL
 );
 
 -- End the transaction

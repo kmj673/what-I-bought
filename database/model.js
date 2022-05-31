@@ -17,4 +17,26 @@ function createSession(sid, user) {
   return db.query(query_text, [sid, user]).then((result) => result.rows[0].sid);
 }
 
-module.exports = { getUser, createUser, createSession };
+function createPost(img) {
+  const query_text = /*sql*/ `INSERT INTO posts (img) VALUES ($1) RETURNING img;`;
+  return db.query(query_text, [img]).then((result) => result.rows[0]);
+}
+
+function getImg(id) {
+  const query_text = /*sql*/ `SELECT * FROM posts WHERE id=$1`;
+  return db.query(query_text, [id]).then((result) => result.rows[0]);
+}
+
+function getPosts() {
+  const query_text = /*sql*/ `SELECT * FROM posts;`;
+  return db.query(query_text).then((result) => result.rows);
+}
+
+module.exports = {
+  getUser,
+  createUser,
+  createSession,
+  createPost,
+  getImg,
+  getPosts,
+};
