@@ -1,16 +1,15 @@
 const model = require("../database/model");
 
 function post(request, response) {
-  console.log(request.file);
   model.createPost(request.file.buffer).then((result) => {
-    response.redirect("/home");
+    response.redirect("/");
   });
 }
 
 function get(request, response) {
-  console.log(request.params.id);
   model.getImg(request.params.id).then((result) => {
-    console.log(result);
+    const bytes = result.img;
+    response.type("image/png").send(bytes);
   });
 }
 

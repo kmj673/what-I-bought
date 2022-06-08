@@ -4,6 +4,7 @@ const signupRoute = require("./routes/signup");
 const loginRoute = require("./routes/login");
 const logoutRoute = require("./routes/logout");
 const imageRoute = require("./routes/image");
+const deleteRoute = require("./routes/delete");
 
 //express
 const express = require("express");
@@ -14,18 +15,18 @@ const bodyParser = express.urlencoded({ extended: true });
 //middleware
 const logger = require("./middleware/logger");
 const cookieParser = require("cookie-parser");
-const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({ dest: "uploads/", storage: storage });
 
 app.use(staticHandler);
 app.use(bodyParser);
 app.use(logger);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
+const multer = require("multer");
+const upload = multer();
+
 //app route handler
-app.get("/home", homeRoute.get);
-app.post("/home", homeRoute.post);
+app.get("/", homeRoute.get);
+app.post("/", homeRoute.post);
 app.get("/signup", signupRoute.get);
 app.post("/signup", signupRoute.post);
 app.get("/login", loginRoute.get);
@@ -33,6 +34,7 @@ app.post("/login", loginRoute.post);
 app.post("/logout", logoutRoute.post);
 app.post("/image", upload.single("image"), imageRoute.post);
 app.get("/image/:id", imageRoute.get);
+app.post("/delete", deleteRoute.post);
 
 //catch-all handler
 app.use((request, response) => {

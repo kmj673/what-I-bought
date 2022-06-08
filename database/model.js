@@ -32,6 +32,11 @@ function getPosts() {
   return db.query(query_text).then((result) => result.rows);
 }
 
+function deletePost(id) {
+  const query_text = /*sql*/ `DELETE FROM posts WHERE id=$1 RETURNING id, img;`;
+  return db.query(query_text, [id]);
+}
+
 module.exports = {
   getUser,
   createUser,
@@ -39,4 +44,5 @@ module.exports = {
   createPost,
   getImg,
   getPosts,
+  deletePost,
 };
